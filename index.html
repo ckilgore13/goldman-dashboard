@@ -22,21 +22,21 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--sp);color:var(--tp);min-height:100vh;padding-bottom:48px;transition:background .2s,color .2s}
 
-  .hdr{background:var(--cb);border-bottom:1px solid var(--bd);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+  .hdr{background:#0c2340;border-bottom:1px solid rgba(255,255,255,.08);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.30)}
   .hl{display:flex;align-items:center;gap:14px}
-  .badge{background:var(--bb);color:var(--bc);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
-  .htitle{font-size:18px;font-weight:600}
+  .badge{background:rgba(208,151,20,.22);color:#e5c040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;border:1px solid rgba(208,151,20,.35)}
+  .htitle{font-size:18px;font-weight:600;color:#ffffff}
   .hr{display:flex;align-items:center;gap:16px}
-  .upd{font-size:12px;color:var(--tm)}
-  .tbtn{background:none;border:1px solid var(--bd);color:var(--ts);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer}
-  .tbtn:hover{background:var(--gl)}
+  .upd{font-size:12px;color:rgba(255,255,255,.48)}
+  .tbtn{background:none;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.62);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer}
+  .tbtn:hover{background:rgba(255,255,255,.10)}
 
   .main{max-width:1240px;margin:0 auto;padding:28px 24px 0}
 
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
   @media(max-width:800px){.tiles{grid-template-columns:repeat(2,1fr)}}
   .tile{background:var(--cb);border-radius:10px;padding:20px 22px;box-shadow:var(--sh);border:1px solid var(--bd);border-left:3px solid var(--s1)}
-  .tile:nth-child(1){border-left-color:var(--s1)}.tile:nth-child(2){border-left-color:var(--s3)}
+  .tile:nth-child(1){border-left-color:#1a3464}.tile:nth-child(2){border-left-color:var(--s3)}
   .tile:nth-child(3){border-left-color:var(--s2)}.tile:nth-child(4){border-left-color:var(--s4)}
   .tl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:8px}
   .tv{font-size:32px;font-weight:700;line-height:1}
@@ -64,8 +64,13 @@
 <body>
 <header class="hdr">
   <div class="hl">
-    <span class="badge">Goldman Sachs</span>
-    <span class="htitle">Custodian Tracker</span>
+    <div style="display:flex;flex-direction:column;line-height:1">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:4px">Carson Wealth</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="badge">Goldman Sachs</span>
+        <span class="htitle">Custodian Tracker</span>
+      </div>
+    </div>
   </div>
   <div class="hr">
     <span class="upd">Last updated: November 5, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
@@ -181,25 +186,25 @@
         <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 30 Days</div>
         <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
-          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
       <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
         <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 60 Days</div>
         <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
-          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
       <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
         <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 90 Days</div>
         <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
-          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
     </div>
     <div class="src">Wizard = SF Cases (Wizard_Name__c = account/multiAccount) &bull; Registrations = non-sleeve advisory FAs (excl. Contribution/Distribution/Custodial/Transition sleeves) &bull; All 15 registrations created since 10/12/2026 &bull; Time windows will differentiate as the platform matures</div>
@@ -216,10 +221,10 @@
   <!-- Row 1: New Accounts + AUM by Office -->
   <div class="r2">
     <div class="card">
-      <div class="ct">New Accounts by Office</div>
-      <div class="cs">Wizard completions by office — all within 30 days of launch (30d = 60d = 90d)</div>
+      <div class="ct">Accounts Opened with New Account Wizard</div>
+      <div class="cs">Accounts opened via Carson's New Account Wizard by office — all within 30 days of launch</div>
       <div class="cw"><canvas id="newAccountsChart"></canvas></div>
-      <div class="src">Source: Salesforce Cases &bull; 16 real of 56 total cases &bull; BMY=13, CWM Omaha=2, CWM Hagerstown=1</div>
+      <div class="src">Source: Salesforce wizard cases linked to Goldman FAs &bull; Updated daily</div>
     </div>
     <div class="card">
       <div class="ct">AUM by Office</div>
@@ -278,7 +283,7 @@
     <div class="card">
       <div class="ct">Goldman Access by Office</div>
       <div class="cs">Users with Goldman Sachs custodian access — largest to smallest</div>
-      <div class="cw cw-lg"><canvas id="accessChart"></canvas></div>
+      <div class="cw" style="max-height:520px"><canvas id="accessChart"></canvas></div>
       <div class="src">Source: Goldman Access Completed.xlsx &bull; 70 users across 9 offices</div>
     </div>
   </div>
@@ -376,7 +381,7 @@ const GS_ORIGIN_CUSTODIAN=[0,1,0];
 
 // GS_NEWACCTS_DATA_START
 const GS_NEWACCTS_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors'];
-const GS_NEWACCTS_DATA_30=[14,2,1];
+const GS_NEWACCTS_DATA_30=[14,1,1];
 const GS_WIZARD_30=16;
 const GS_REGS_30=17;
 const GS_WIZARD_60=16;
@@ -427,6 +432,8 @@ function applyOrionData(){
     if(bigNums[3])bigNums[3].textContent=GS_REGS_60;
     if(bigNums[4])bigNums[4].textContent=GS_WIZARD_90;
     if(bigNums[5])bigNums[5].textContent=GS_REGS_90;
+    const covPct=GS_REGS_30>0?Math.round(GS_WIZARD_30/GS_REGS_30*100):0;
+    actCard.querySelectorAll('.act-cov').forEach(function(el){el.textContent=covPct+'% wizard coverage';});
   }
 }
 applyOrionData();
@@ -523,7 +530,9 @@ new Chart(document.getElementById('accessChart'),{
     plugins:{legend:{display:false},
       tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x} user${ctx.parsed.x!==1?'s':''}`}},
       datalabels:{display:true,anchor:'end',align:'right',color:cv('--ts'),font:{weight:'600'},formatter:v=>v}},
-    scales:{...scH(),x:{...scH().x,max:Math.ceil(Math.max(...GS_ACCESS_DATA)*1.2),ticks:{...scH().x.ticks,stepSize:Math.ceil(Math.max(...GS_ACCESS_DATA)/4)}}}}
+    scales:{...scH(),
+      x:{...scH().x,max:Math.ceil(Math.max(...GS_ACCESS_DATA)*1.2),ticks:{...scH().x.ticks,stepSize:Math.ceil(Math.max(...GS_ACCESS_DATA)/4)}},
+      y:{...scH().y,ticks:{...scH().y.ticks,autoSkip:false}}}}
 });
 </script>
 </body>
