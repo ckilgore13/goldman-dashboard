@@ -201,7 +201,6 @@
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
           <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
       <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
         <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 60 Days</div>
@@ -209,7 +208,6 @@
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
           <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
       <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
         <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 90 Days</div>
@@ -217,7 +215,6 @@
           <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
           <div><span style="font-size:26px;font-weight:700;color:var(--s2)">17</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
         </div>
-        <div class="act-cov" style="font-size:11px;color:var(--tm);margin-top:4px">94% wizard coverage</div>
       </div>
     </div>
     <div class="src">Wizard = SF Cases (Wizard_Name__c = account/multiAccount) &bull; Registrations = non-sleeve advisory FAs (excl. Contribution/Distribution/Custodial/Transition sleeves) &bull; All 15 registrations created since 10/12/2026 &bull; Time windows will differentiate as the platform matures</div>
@@ -485,8 +482,6 @@ function applyOrionData(){
     if(bigNums[3])bigNums[3].textContent=GS_REGS_60;
     if(bigNums[4])bigNums[4].textContent=GS_WIZARD_90;
     if(bigNums[5])bigNums[5].textContent=GS_REGS_90;
-    const covPct=GS_REGS_30>0?Math.round(GS_WIZARD_30/GS_REGS_30*100):0;
-    actCard.querySelectorAll('.act-cov').forEach(function(el){el.textContent=covPct+'% wizard coverage';});
   }
 }
 applyOrionData();
