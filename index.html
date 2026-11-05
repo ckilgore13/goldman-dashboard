@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goldman Sachs Custodian Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root[data-theme="light"] {
+    --sp:#f4f3f0; --cb:#ffffff; --tp:#0b0b0b; --ts:#52514e; --tm:#898781;
+    --gl:#e1e0d9; --bd:rgba(11,11,11,.10); --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+    --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7;--s8:#e34948;
+    --bb:#eef4fd;--bc:#1c5cab;
+  }
+  :root[data-theme="dark"] {
+    --sp:#0d0d0c; --cb:#232321; --tp:#ffffff; --ts:#c3c2b7; --tm:#898781;
+    --gl:#2c2c2a; --bd:rgba(255,255,255,.10); --sh:0 1px 3px rgba(0,0,0,.4);
+    --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;
+    --bb:#1c2c40;--bc:#86b6ef;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--sp);color:var(--tp);min-height:100vh;padding-bottom:48px;transition:background .2s,color .2s}
+
+  .hdr{background:var(--cb);border-bottom:1px solid var(--bd);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+  .hl{display:flex;align-items:center;gap:14px}
+  .badge{background:var(--bb);color:var(--bc);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+  .htitle{font-size:18px;font-weight:600}
+  .hr{display:flex;align-items:center;gap:16px}
+  .upd{font-size:12px;color:var(--tm)}
+  .tbtn{background:none;border:1px solid var(--bd);color:var(--ts);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer}
+  .tbtn:hover{background:var(--gl)}
+
+  .main{max-width:1240px;margin:0 auto;padding:28px 24px 0}
+
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  @media(max-width:800px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--cb);border-radius:10px;padding:20px 22px;box-shadow:var(--sh);border:1px solid var(--bd);border-left:3px solid var(--s1)}
+  .tile:nth-child(1){border-left-color:var(--s1)}.tile:nth-child(2){border-left-color:var(--s3)}
+  .tile:nth-child(3){border-left-color:var(--s2)}.tile:nth-child(4){border-left-color:var(--s4)}
+  .tl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:8px}
+  .tv{font-size:32px;font-weight:700;line-height:1}
+  .tsub{font-size:12px;color:var(--ts);margin-top:6px}
+
+  .card{background:var(--cb);border-radius:10px;padding:22px 22px 18px;box-shadow:var(--sh);border:1px solid var(--bd);margin-bottom:20px}
+  .ct{font-size:14px;font-weight:600;margin-bottom:3px}
+  .cs{font-size:12px;color:var(--ts);margin-bottom:18px}
+  .r2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+  @media(max-width:800px){.r2{grid-template-columns:1fr}}
+  .cw canvas{max-height:300px}
+  .cw-lg canvas{max-height:380px}
+  .src{font-size:11px;color:var(--tm);margin-top:10px;padding-top:10px;border-top:1px solid var(--gl)}
+
+  /* model table */
+  .mt{width:100%;border-collapse:collapse;font-size:12px}
+  .mt th{text-align:left;color:var(--tm);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:5px 7px;border-bottom:2px solid var(--gl)}
+  .mt td{padding:5px 7px;border-bottom:1px solid var(--gl);color:var(--tp)}
+  .mt tr:last-child td{border-bottom:none}
+  .mt .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--ts)}
+  .mt .rb{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--tp)}
+  .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;flex-shrink:0}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hl">
+    <span class="badge">Goldman Sachs</span>
+    <span class="htitle">Custodian Tracker</span>
+  </div>
+  <div class="hr">
+    <span class="upd">Last updated: November 5, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
+    <button class="tbtn" onclick="toggleTheme()">Toggle Dark Mode</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="tl">Advisory Registrations</div>
+      <div class="tv">15</div>
+      <div class="tsub">Non-sleeve registrations (15 registrations incl. 32 sleeves)</div>
+    </div>
+    <div class="tile">
+      <div class="tl">Total AUM</div>
+      <div class="tv">$1.74M</div>
+      <div class="tsub">Advisory accounts in Salesforce</div>
+    </div>
+    <div class="tile">
+      <div class="tl">New Accounts (Wizard)</div>
+      <div class="tv">16</div>
+      <div class="tsub">Completed wizard flows since launch</div>
+    </div>
+    <div class="tile">
+      <div class="tl">Offices with Active Accounts</div>
+      <div class="tv">3</div>
+      <div class="tsub">BMY Wealth, CWM Omaha, CWM Hagerstown</div>
+    </div>
+  </div>
+
+  <!-- Gauge -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <div>
+        <div class="ct">AUM Progress to $1 Billion Limit</div>
+        <div class="cs" style="margin-bottom:0">Goldman Sachs custodian — regulatory / firm AUM ceiling</div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(27,175,122,0.6)"></span>Safe (0–75%)</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(237,161,0,0.7)"></span>Warning (75–90%)</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(227,73,72,0.7)"></span>Critical (90–100%)</span>
+      </div>
+    </div>
+
+    <!-- SVG Gauge — center (200,200), r=150, stroke=28, outer edge r=164 -->
+    <svg id="gaugeSvg" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"
+         style="width:100%;max-width:560px;display:block;margin:0 auto">
+
+      <!-- Background track -->
+      <path d="M 50 200 A 150 150 0 0 1 350 200"
+            fill="none" stroke-width="28" stroke-linecap="round"
+            style="stroke:var(--gl)"/>
+
+      <!-- Green zone: 0–75% -->
+      <path d="M 50 200 A 150 150 0 0 1 306.1 93.9"
+            fill="none" stroke-width="28" stroke-linecap="butt"
+            stroke="rgba(27,175,122,0.50)"/>
+
+      <!-- Yellow zone: 75–90% -->
+      <path d="M 306.1 93.9 A 150 150 0 0 1 342.7 153.7"
+            fill="none" stroke-width="28" stroke-linecap="butt"
+            stroke="rgba(237,161,0,0.60)"/>
+
+      <!-- Red zone: 90–100% -->
+      <path d="M 342.7 153.7 A 150 150 0 0 1 350 200"
+            fill="none" stroke-width="28" stroke-linecap="round"
+            stroke="rgba(227,73,72,0.60)"/>
+
+      <!-- Tick marks at milestones — from outer arc edge outward -->
+      <!-- $250M @ 135°: outer edge (84,84) → (76,76) -->
+      <line x1="84" y1="84" x2="74" y2="74" stroke-width="1.5" style="stroke:var(--tm)"/>
+      <!-- $500M @ 90°: outer edge (200,36) → (200,24) -->
+      <line x1="200" y1="36" x2="200" y2="24" stroke-width="1.5" style="stroke:var(--tm)"/>
+      <!-- $750M @ 45°: outer edge (316,84) → (326,74) -->
+      <line x1="316" y1="84" x2="326" y2="74" stroke-width="1.5" style="stroke:var(--tm)"/>
+
+      <!-- Milestone labels — all positioned beyond radius 170 from center (200,200) -->
+      <!-- $0: below left arc end -->
+      <text x="38" y="218" text-anchor="middle" font-size="11" style="fill:var(--tm);font-family:system-ui,sans-serif">$0</text>
+      <!-- $250M @ 135°: r=192 → (200-135.8, 200-135.8) = (64,64) -->
+      <text x="64" y="67" text-anchor="middle" font-size="11" style="fill:var(--tm);font-family:system-ui,sans-serif">$250M</text>
+      <!-- $500M @ 90°: r=184 → (200,16) -->
+      <text x="200" y="18" text-anchor="middle" font-size="11" style="fill:var(--tm);font-family:system-ui,sans-serif">$500M</text>
+      <!-- $750M @ 45°: r=192 → (200+135.8, 64) = (336,64) -->
+      <text x="336" y="67" text-anchor="middle" font-size="11" style="fill:var(--tm);font-family:system-ui,sans-serif">$750M ⚠</text>
+      <!-- $1B: below right arc end -->
+      <text x="362" y="218" text-anchor="middle" font-size="11" style="fill:var(--tm);font-family:system-ui,sans-serif">$1B</text>
+
+      <!-- Needle -->
+      <line id="gaugeNeedle" x1="200" y1="200" x2="70" y2="199"
+            stroke-width="3" stroke-linecap="round" style="stroke:var(--tp)"/>
+      <circle cx="200" cy="200" r="8" style="fill:var(--tp)"/>
+      <circle cx="200" cy="200" r="4" style="fill:var(--cb)"/>
+
+      <!-- Center value -->
+      <text x="200" y="148" text-anchor="middle" font-size="26" font-weight="700"
+            style="fill:var(--tp);font-family:system-ui,sans-serif">$1.74M</text>
+      <text x="200" y="171" text-anchor="middle" font-size="12"
+            style="fill:var(--ts);font-family:system-ui,sans-serif">0.0017% of $1B limit</text>
+    </svg>
+
+    <div class="src" style="max-width:560px;margin:4px auto 0">Alerts fire at $750M (warning) and $900M (critical) via Slack + email &bull; Recipients: Cole, Jessica Golson, Leanne Ball, Sarah Stormberg</div>
+  </div>
+
+  <!-- 30/60/90 Activity Card -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ct">Account Activity by Time Window</div>
+    <div class="cs">Wizard completions vs active registrations — Goldman launched ~Oct 1, 2026; all activity is within 30 days</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:12px">
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 30 Days</div>
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+      </div>
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 60 Days</div>
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+      </div>
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Last 90 Days</div>
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <div><span style="font-size:26px;font-weight:700">16</span><span style="font-size:11px;color:var(--ts);margin-left:4px">wizard</span></div>
+          <div><span style="font-size:26px;font-weight:700;color:var(--s2)">15</span><span style="font-size:11px;color:var(--ts);margin-left:4px">registrations</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--tm);margin-top:4px">~100% wizard coverage</div>
+      </div>
+    </div>
+    <div class="src">Wizard = SF Cases (Wizard_Name__c = account/multiAccount) &bull; Registrations = non-sleeve advisory FAs (excl. Contribution/Distribution/Custodial/Transition sleeves) &bull; All 15 registrations created since 10/12/2026 &bull; Time windows will differentiate as the platform matures</div>
+  </div>
+
+  <!-- Row 1: New Accounts + AUM by Office -->
+  <div class="r2">
+    <div class="card">
+      <div class="ct">New Accounts by Office</div>
+      <div class="cs">Wizard completions by office — all within 30 days of launch (30d = 60d = 90d)</div>
+      <div class="cw"><canvas id="newAccountsChart"></canvas></div>
+      <div class="src">Source: Salesforce Cases &bull; 16 real of 56 total cases &bull; BMY=13, CWM Omaha=2, CWM Hagerstown=1</div>
+    </div>
+    <div class="card">
+      <div class="ct">AUM by Office</div>
+      <div class="cs">Advisory account AUM — accounts opened at CWM Omaha (2) and CWM Hagerstown (1) are not yet funded</div>
+      <div class="cw"><canvas id="aumOfficeChart"></canvas></div>
+      <div class="src">Source: Salesforce FA_Current_Total__c &bull; Validated against Orion — AUM matches exactly ($1,744,445) &bull; 10 of 15 registrations funded; all under Justin Haschke / BMY (5 pending model assignment)</div>
+    </div>
+  </div>
+
+  <!-- L/S Capacity Card -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+      <div>
+        <div class="ct">L/S Capacity — AQR Flex Strategies</div>
+        <div class="cs" style="margin-bottom:0">Goldman accounts in AQR Flex models as % of total AUM</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:14px">
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">Total Goldman AUM</div>
+        <div style="font-size:28px;font-weight:700">$1.74M</div>
+        <div style="font-size:11px;color:var(--ts);margin-top:3px">15 advisory accounts</div>
+      </div>
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">AQR Flex AUM (L/S)</div>
+        <div style="font-size:28px;font-weight:700">$0</div>
+        <div style="font-size:11px;color:var(--ts);margin-top:3px">0 accounts in L/S strategies</div>
+      </div>
+      <div style="background:var(--sp);border-radius:8px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:6px">L/S % of Total AUM</div>
+        <div style="font-size:28px;font-weight:700">0.0%</div>
+        <div style="font-size:11px;color:var(--ts);margin-top:3px">0 of $1.74M in L/S</div>
+      </div>
+    </div>
+    <div style="background:var(--gl);border-radius:4px;height:8px;margin-bottom:8px;overflow:hidden">
+      <div id="lsBar" style="background:var(--s1);height:8px;border-radius:4px;width:0%"></div>
+    </div>
+    <div class="src">L/S strategy = model name contains "AQR Flex" &bull; A UDF on the model level is planned for future automation &bull; No accounts in L/S strategies as of Nov 3, 2026</div>
+  </div>
+
+  <!-- Row 2: Strategy + Access -->
+  <div class="r2">
+    <div class="card">
+      <div class="ct">Strategy / Model Distribution</div>
+      <div class="cs">14 funded Goldman advisory accounts (15 total; 33 unfunded), sorted by AUM — sleeve accounts excluded</div>
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:0 0 190px">
+          <canvas id="strategyChart" style="max-height:220px"></canvas>
+        </div>
+        <div style="flex:1;min-width:180px;overflow-x:auto">
+          <table class="mt" id="modelTable"></table>
+        </div>
+      </div>
+      <div class="src">Source: Salesforce OASP_FSC__Model__c &bull; Advisory accounts &bull; Transition/Contribution/Distribution/Custodial sleeves excluded</div>
+    </div>
+    <div class="card">
+      <div class="ct">Goldman Access by Office</div>
+      <div class="cs">Users with Goldman Sachs custodian access — largest to smallest</div>
+      <div class="cw cw-lg"><canvas id="accessChart"></canvas></div>
+      <div class="src">Source: Goldman Access Completed.xlsx &bull; 70 users across 9 offices</div>
+    </div>
+  </div>
+
+</main>
+<script>
+Chart.register(ChartDataLabels);
+
+// ── Gauge (SVG-based) ─────────────────────────────────────────────────────
+const GS_LIMIT  = 1_000_000_000;
+const GS_AUM    = 1_744_445.23;
+const GS_PCT    = GS_AUM / GS_LIMIT;
+const GS_WARN   = 0.75;
+const GS_CRIT   = 0.90;
+
+(function positionGaugeNeedle() {
+  const needle = document.getElementById('gaugeNeedle');
+  if (!needle) return;
+  // Gauge arc: left=(50,200) at 0%, right=(350,200) at 100%, center=(200,200), r=150
+  // angle in radians: 0% → π (pointing left), 100% → 0 (pointing right)
+  const angle = (1 - GS_PCT) * Math.PI;
+  const nx = 200 + 130 * Math.cos(angle);
+  const ny = 200 - 130 * Math.sin(angle);
+  needle.setAttribute('x2', nx.toFixed(1));
+  needle.setAttribute('y2', ny.toFixed(1));
+})();
+
+Chart.defaults.font.family='system-ui,-apple-system,"Segoe UI",sans-serif';
+Chart.defaults.font.size=12;
+Chart.defaults.plugins.datalabels.display=false;
+
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function fmt$(v){if(!v||v===0)return'$0';if(v>=1e6)return'$'+(v/1e6).toFixed(2)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+v.toLocaleString()}
+
+function toggleTheme(){
+  const h=document.documentElement;
+  h.dataset.theme=h.dataset.theme==='dark'?'light':'dark';
+  buildTable();
+  Object.values(Chart.instances).forEach(c=>{refreshTheme(c);c.update('none')});
+}
+function refreshTheme(c){
+  const m=cv('--tm'),g=cv('--gl'),s=cv('--ts');
+  if(c.options.plugins?.legend?.labels)c.options.plugins.legend.labels.color=s;
+  if(c.options.plugins?.datalabels)c.options.plugins.datalabels.color=s;
+  ['x','y'].forEach(ax=>{if(c.options.scales?.[ax]){c.options.scales[ax].grid.color=g;c.options.scales[ax].ticks.color=m}});
+}
+
+function scV(){const m=cv('--tm'),g=cv('--gl');return{x:{grid:{display:false},ticks:{color:m}},y:{grid:{color:g},ticks:{color:m},beginAtZero:true}}}
+function scH(){const m=cv('--tm'),g=cv('--gl');return{x:{grid:{color:g},ticks:{color:m},beginAtZero:true},y:{grid:{display:false},ticks:{color:m}}}}
+
+// ── Data ─────────────────────────────────────────────────────────────────────
+// Models sorted by AUM desc (sleeves removed)
+const MODELS=[
+  {name:'Dynamic Core Aggressive',      count:4, aum:880850.19},
+  {name:'Legacy Holdings',              count:2, aum:766185.89},
+  {name:'Mission US Growth',            count:1, aum:86785.38},
+  {name:'IWF - iShares Russell 1000',   count:3, aum:10623.77},
+  {name:'Model Assignment Pending',     count:5, aum:0},
+];
+
+const PAL=()=>[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5')];
+
+// Model table
+function buildTable(){
+  const pal=PAL();
+  const tb=document.getElementById('modelTable');
+  tb.innerHTML=`<thead><tr><th>Model</th><th class="r">Accts</th><th class="r">AUM</th></tr></thead>`;
+  const tbody=document.createElement('tbody');
+  MODELS.forEach((m,i)=>{
+    const tr=document.createElement('tr');
+    const aumCell=m.aum>0?`<td class="rb">${fmt$(m.aum)}</td>`:`<td class="r" style="color:var(--tm)">—</td>`;
+    tr.innerHTML=`<td><span class="sw" style="background:${pal[i]}"></span>${m.name}</td><td class="r">${m.count}</td>${aumCell}`;
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+  // Total row
+  const tfoot=document.createElement('tfoot');
+  tfoot.innerHTML=`<tr style="border-top:2px solid var(--gl)"><td style="font-weight:600">Total</td><td class="r" style="font-weight:600">15</td><td class="rb">$1.74M</td></tr>`;
+  tb.appendChild(tfoot);
+}
+buildTable();
+
+// ── Chart 1: New Accounts by Office ─────────────────────────────────────────
+new Chart(document.getElementById('newAccountsChart'),{
+  type:'bar',
+  data:{
+    labels:['BMY Wealth','CWM Omaha','CWM Hagerstown'],
+    datasets:[{data:[13,2,1],backgroundColor:[cv('--s1'),cv('--s2'),cv('--s3')],borderRadius:4,borderSkipped:false}]
+  },
+  options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} account${ctx.parsed.y!==1?'s':''} (all within 30d of launch)`}},
+    datalabels:{display:true,anchor:'end',align:'top',color:cv('--ts'),font:{weight:'600'},formatter:v=>v}},
+    scales:{...scV(),y:{...scV().y,max:16,ticks:{...scV().y.ticks,stepSize:4}}}}
+});
+
+// ── Chart 2: AUM by Office (FA-derived, consistent with tile) ─────────────
+new Chart(document.getElementById('aumOfficeChart'),{
+  type:'bar',
+  data:{
+    labels:['BMY Wealth'],
+    datasets:[{data:[1744445.23],backgroundColor:[cv('--s1')],borderRadius:4,borderSkipped:false}]
+  },
+  options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.parsed.y)}`}},
+    datalabels:{display:true,anchor:'end',align:'top',color:cv('--ts'),font:{weight:'600',size:13},formatter:v=>fmt$(v)}},
+    scales:{...scV(),y:{...scV().y,max:2100000,ticks:{...scV().y.ticks,callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>0?'$'+(v/1e3).toFixed(0)+'K':'$0'}}}}
+});
+
+// ── Chart 3: Strategy donut (AUM-sorted, slices = count) ──────────────────
+new Chart(document.getElementById('strategyChart'),{
+  type:'doughnut',
+  data:{
+    labels:MODELS.map(m=>m.name),
+    datasets:[{
+      data:MODELS.map(m=>m.count),
+      backgroundColor:PAL(),
+      borderWidth:2,borderColor:cv('--cb'),hoverBorderWidth:2
+    }]
+  },
+  options:{responsive:true,maintainAspectRatio:true,cutout:'58%',plugins:{
+    legend:{display:false},
+    tooltip:{callbacks:{label:ctx=>{
+      const tot=ctx.dataset.data.reduce((a,b)=>a+b,0);
+      const pct=((ctx.parsed/tot)*100).toFixed(0);
+      const aum=MODELS[ctx.dataIndex].aum;
+      return[` ${ctx.parsed} accounts (${pct}%)`,` AUM: ${fmt$(aum)}`];
+    }}},
+    datalabels:{display:false}
+  }}
+});
+
+// ── Chart 4: Access by Office ─────────────────────────────────────────────
+// GS_ACCESS_DATA_START
+const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Hagerstown','CWMG-Doylestown','CWMG-Omaha','Diamond Wealth Advisors','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Carson Group (Home Office)','BluePrint Wealth'];
+const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,2];
+const GS_ACCESS_TOTAL=137;
+const GS_ACCESS_UPDATED='2026-11-05';
+// GS_ACCESS_DATA_END
+new Chart(document.getElementById('accessChart'),{
+  type:'bar',
+  data:{
+    labels:GS_ACCESS_LABELS,
+    datasets:[{data:GS_ACCESS_DATA,backgroundColor:cv('--s1'),borderRadius:4,borderSkipped:false}]
+  },
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x} user${ctx.parsed.x!==1?'s':''}`}},
+      datalabels:{display:true,anchor:'end',align:'right',color:cv('--ts'),font:{weight:'600'},formatter:v=>v}},
+    scales:{...scH(),x:{...scH().x,max:Math.ceil(Math.max(...GS_ACCESS_DATA)*1.2),ticks:{...scH().x.ticks,stepSize:Math.ceil(Math.max(...GS_ACCESS_DATA)/4)}}}}
+});
+</script>
+</body>
+</html>
