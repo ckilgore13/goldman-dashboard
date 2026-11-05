@@ -281,7 +281,24 @@ Chart.register(ChartDataLabels);
 
 // ── Gauge (SVG-based) ─────────────────────────────────────────────────────
 const GS_LIMIT  = 1_000_000_000;
-const GS_AUM    = 1_744_445.23;
+// GS_ORION_DATA_START
+const GS_AUM=1773859.45;
+const GS_REGISTRATIONS=49;
+const MODELS=[
+  {name:'Dynamic Core Aggressive',count:4,aum:894789.01},
+  {name:'Legacy Holdings',count:2,aum:760093.98},
+  {name:'Mission US Growth',count:1,aum:88245.09},
+  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10771.61},
+  {name:'Model Assignment Pending',count:37,aum:10015.03},
+  {name:'SPY - SPDR S&P 500',count:1,aum:7145.98},
+  {name:'IBIT - iShares Bitcoin Trust',count:1,aum:0}
+];
+const GS_AUM_BY_OFFICE_LABELS=['BMY Wealth'];
+const GS_AUM_BY_OFFICE_DATA=[1753899.69];
+const GS_LS_AUM=0;
+const GS_LS_ACCTS=0;
+const GS_ORION_UPDATED='2026-11-05';
+// GS_ORION_DATA_END
 const GS_PCT    = GS_AUM / GS_LIMIT;
 const GS_WARN   = 0.75;
 const GS_CRIT   = 0.90;
@@ -322,14 +339,6 @@ function scV(){const m=cv('--tm'),g=cv('--gl');return{x:{grid:{display:false},ti
 function scH(){const m=cv('--tm'),g=cv('--gl');return{x:{grid:{color:g},ticks:{color:m},beginAtZero:true},y:{grid:{display:false},ticks:{color:m}}}}
 
 // ── Data ─────────────────────────────────────────────────────────────────────
-// Models sorted by AUM desc (sleeves removed)
-const MODELS=[
-  {name:'Dynamic Core Aggressive',      count:4, aum:880850.19},
-  {name:'Legacy Holdings',              count:2, aum:766185.89},
-  {name:'Mission US Growth',            count:1, aum:86785.38},
-  {name:'IWF - iShares Russell 1000',   count:3, aum:10623.77},
-  {name:'Model Assignment Pending',     count:5, aum:0},
-];
 
 const PAL=()=>[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5')];
 
@@ -348,17 +357,74 @@ function buildTable(){
   tb.appendChild(tbody);
   // Total row
   const tfoot=document.createElement('tfoot');
-  tfoot.innerHTML=`<tr style="border-top:2px solid var(--gl)"><td style="font-weight:600">Total</td><td class="r" style="font-weight:600">15</td><td class="rb">$1.74M</td></tr>`;
+  tfoot.innerHTML=`<tr style="border-top:2px solid var(--gl)"><td style="font-weight:600">Total</td><td class="r" style="font-weight:600">${MODELS.reduce((s,m)=>s+m.count,0)}</td><td class="rb">${fmt$(GS_AUM)}</td></tr>`;
   tb.appendChild(tfoot);
 }
 buildTable();
+
+// GS_NEWACCTS_DATA_START
+const GS_NEWACCTS_LABELS=['Sample Business Line','BMY Wealth','CWMG Omaha','Diamond Wealth Advisors'];
+const GS_NEWACCTS_DATA_30=[25,14,2,1];
+const GS_WIZARD_30=49;
+const GS_REGS_30=49;
+const GS_WIZARD_60=49;
+const GS_REGS_60=49;
+const GS_WIZARD_90=49;
+const GS_REGS_90=49;
+// GS_NEWACCTS_DATA_END
+
+function applyOrionData(){
+  // Gauge SVG — update center text
+  const gaugeSvg=document.getElementById('gaugeSvg');
+  if(gaugeSvg){
+    const texts=gaugeSvg.querySelectorAll('text');
+    texts.forEach(function(t){
+      if(t.getAttribute('y')==='148')t.textContent=fmt$(GS_AUM);
+      if(t.getAttribute('y')==='171')t.textContent=(GS_PCT*100).toFixed(4)+'% of $1B limit';
+    });
+  }
+  // Summary tiles
+  const tileAum=document.querySelector('.tile:nth-child(2) .tv');
+  if(tileAum)tileAum.textContent=fmt$(GS_AUM);
+  const tileRegs=document.querySelector('.tile:nth-child(1) .tv');
+  if(tileRegs)tileRegs.textContent=GS_REGISTRATIONS;
+  const tileWiz=document.querySelector('.tile:nth-child(3) .tv');
+  if(tileWiz)tileWiz.textContent=GS_WIZARD_30;
+  // L/S card
+  const lsCard=Array.from(document.querySelectorAll('.card')).find(function(c){return c.querySelector('.ct')&&c.querySelector('.ct').textContent.includes('L/S');});
+  if(lsCard){
+    const bigNums=lsCard.querySelectorAll('[style*="font-size:28px"]');
+    if(bigNums[0])bigNums[0].textContent=fmt$(GS_AUM);
+    if(bigNums[1])bigNums[1].textContent=fmt$(GS_LS_AUM);
+    const lsPctVal=GS_AUM>0?((GS_LS_AUM/GS_AUM)*100).toFixed(1)+'%':'0.0%';
+    if(bigNums[2])bigNums[2].textContent=lsPctVal;
+    const subs=lsCard.querySelectorAll('[style*="font-size:11px"][style*="color:var(--ts)"]');
+    if(subs[0])subs[0].textContent=GS_REGISTRATIONS+' advisory accounts';
+    if(subs[1])subs[1].textContent=GS_LS_ACCTS+' accounts in L/S strategies';
+    if(subs[2])subs[2].textContent=GS_LS_ACCTS+' of '+fmt$(GS_AUM)+' in L/S';
+    const lsBarEl=document.getElementById('lsBar');
+    if(lsBarEl)lsBarEl.style.width=(GS_AUM>0?(GS_LS_AUM/GS_AUM*100):0)+'%';
+  }
+  // Account Activity card
+  const actCard=Array.from(document.querySelectorAll('.card')).find(function(c){return c.querySelector('.ct')&&c.querySelector('.ct').textContent.includes('Account Activity');});
+  if(actCard){
+    const bigNums=actCard.querySelectorAll('[style*="font-size:26px"]');
+    if(bigNums[0])bigNums[0].textContent=GS_WIZARD_30;
+    if(bigNums[1])bigNums[1].textContent=GS_REGS_30;
+    if(bigNums[2])bigNums[2].textContent=GS_WIZARD_60;
+    if(bigNums[3])bigNums[3].textContent=GS_REGS_60;
+    if(bigNums[4])bigNums[4].textContent=GS_WIZARD_90;
+    if(bigNums[5])bigNums[5].textContent=GS_REGS_90;
+  }
+}
+applyOrionData();
 
 // ── Chart 1: New Accounts by Office ─────────────────────────────────────────
 new Chart(document.getElementById('newAccountsChart'),{
   type:'bar',
   data:{
-    labels:['BMY Wealth','CWM Omaha','CWM Hagerstown'],
-    datasets:[{data:[13,2,1],backgroundColor:[cv('--s1'),cv('--s2'),cv('--s3')],borderRadius:4,borderSkipped:false}]
+    labels:GS_NEWACCTS_LABELS,
+    datasets:[{data:GS_NEWACCTS_DATA_30,backgroundColor:[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5')],borderRadius:4,borderSkipped:false}]
   },
   options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},
     tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} account${ctx.parsed.y!==1?'s':''} (all within 30d of launch)`}},
@@ -370,13 +436,13 @@ new Chart(document.getElementById('newAccountsChart'),{
 new Chart(document.getElementById('aumOfficeChart'),{
   type:'bar',
   data:{
-    labels:['BMY Wealth'],
-    datasets:[{data:[1744445.23],backgroundColor:[cv('--s1')],borderRadius:4,borderSkipped:false}]
+    labels:GS_AUM_BY_OFFICE_LABELS,
+    datasets:[{data:GS_AUM_BY_OFFICE_DATA,backgroundColor:[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5')],borderRadius:4,borderSkipped:false}]
   },
   options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},
     tooltip:{callbacks:{label:ctx=>` ${fmt$(ctx.parsed.y)}`}},
     datalabels:{display:true,anchor:'end',align:'top',color:cv('--ts'),font:{weight:'600',size:13},formatter:v=>fmt$(v)}},
-    scales:{...scV(),y:{...scV().y,max:2100000,ticks:{...scV().y.ticks,callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>0?'$'+(v/1e3).toFixed(0)+'K':'$0'}}}}
+    scales:{...scV(),y:{...scV().y,max:Math.ceil((Math.max(...GS_AUM_BY_OFFICE_DATA)||1744445)*1.2),ticks:{...scV().y.ticks,callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>0?'$'+(v/1e3).toFixed(0)+'K':'$0'}}}}
 });
 
 // ── Chart 3: Strategy donut (AUM-sorted, slices = count) ──────────────────
@@ -404,9 +470,9 @@ new Chart(document.getElementById('strategyChart'),{
 
 // ── Chart 4: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
-const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Hagerstown','CWMG-Doylestown','CWMG-Omaha','Diamond Wealth Advisors','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Carson Group (Home Office)','BluePrint Wealth'];
-const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,2];
-const GS_ACCESS_TOTAL=137;
+const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Omaha','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','Carson Group (Home Office)','BluePrint Wealth'];
+const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,3,2];
+const GS_ACCESS_TOTAL=140;
 const GS_ACCESS_UPDATED='2026-11-05';
 // GS_ACCESS_DATA_END
 new Chart(document.getElementById('accessChart'),{
