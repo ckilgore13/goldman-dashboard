@@ -228,9 +228,9 @@
     </div>
     <div class="card">
       <div class="ct">AUM by Office</div>
-      <div class="cs">Advisory account AUM — accounts opened at CWM Omaha (2) and CWM Hagerstown (1) are not yet funded</div>
+      <div class="cs">Advisory account AUM by office — funded accounts only</div>
       <div class="cw"><canvas id="aumOfficeChart"></canvas></div>
-      <div class="src">Source: Salesforce FA_Current_Total__c &bull; Validated against Orion — AUM matches exactly ($1,744,445) &bull; 10 of 15 registrations funded; all under Justin Haschke / BMY (5 pending model assignment)</div>
+      <div class="src">Source: Orion currentValue &bull; Updated daily</div>
     </div>
   </div>
 
@@ -283,7 +283,7 @@
     <div class="card">
       <div class="ct">Goldman Access by Office</div>
       <div class="cs">Users with Goldman Sachs custodian access — largest to smallest</div>
-      <div class="cw" style="max-height:520px"><canvas id="accessChart"></canvas></div>
+      <div style="position:relative;height:490px"><canvas id="accessChart"></canvas></div>
       <div class="src">Source: Goldman Access Completed.xlsx &bull; 70 users across 9 offices</div>
     </div>
   </div>
@@ -526,7 +526,7 @@ new Chart(document.getElementById('accessChart'),{
     labels:GS_ACCESS_LABELS,
     datasets:[{data:GS_ACCESS_DATA,backgroundColor:cv('--s1'),borderRadius:4,borderSkipped:false}]
   },
-  options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},
       tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x} user${ctx.parsed.x!==1?'s':''}`}},
       datalabels:{display:true,anchor:'end',align:'right',color:cv('--ts'),font:{weight:'600'},formatter:v=>v}},
