@@ -304,6 +304,7 @@
           <table class="mt" id="regTypeTable"></table>
         </div>
       </div>
+      <div id="regCustNote" style="font-size:11px;color:var(--tm);margin-top:12px;padding-top:10px;border-top:1px solid var(--gl)"></div>
       <div class="src">Source: Orion accountType field &bull; Non-sleeve advisory Goldman accounts only &bull; Updated daily</div>
     </div>
   </div>
@@ -429,6 +430,8 @@ const GS_REGS_90=17;
 // GS_REGTYPES_DATA_START
 const GS_REGTYPES_LABELS=['JTWROS','IRA Rollover','Roth','Transfer on Death','Individual'];
 const GS_REGTYPES_DATA=[6,5,3,2,1];
+const GS_CUSTODIAN_REG_LABELS=['Individual'];
+const GS_CUSTODIAN_REG_DATA=[1];
 // GS_REGTYPES_DATA_END
 
 function applyOrionData(){
@@ -602,6 +605,13 @@ new Chart(document.getElementById('originChart'),{
     tbody.appendChild(tr);
   });
   tb.appendChild(tbody);
+  // Custodian-opened footnote
+  var custNote=document.getElementById('regCustNote');
+  if(custNote&&GS_CUSTODIAN_REG_LABELS.length>0){
+    var custTotal=GS_CUSTODIAN_REG_DATA.reduce(function(a,b){return a+b;},0);
+    var parts=GS_CUSTODIAN_REG_LABELS.map(function(l,i){return l+' ('+GS_CUSTODIAN_REG_DATA[i]+')';});
+    custNote.textContent='Opened at custodian ('+custTotal+'): '+parts.join(', ');
+  }
 })();
 
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
