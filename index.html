@@ -631,8 +631,7 @@ const GS_ACCESS_TOTAL=137;
 const GS_ACCESS_UPDATED='2026-11-05';
 // GS_ACCESS_DATA_END
 // GS_ACCESS_HH_DATA_START
-const GS_ACCESS_HH_COUNT=19;
-const GS_TOTAL_CIA_HH=259;
+const GS_TOTAL_PARTNER_OFFICES=191;
 // GS_ACCESS_HH_DATA_END
 // GS_CUSTODIAN_AUM_DATA_START
 const GS_CUSTODIAN_LABELS=['Goldman Sachs','Fidelity','Schwab'];
@@ -655,12 +654,14 @@ new Chart(document.getElementById('accessChart'),{
       y:{...scH().y,ticks:{...scH().y.ticks,autoSkip:false}}}}
 });
 
-// ── Access HH footer ─────────────────────────────────────────────────────
+// ── Access office footer ──────────────────────────────────────────────────
 (function(){
   var el=document.getElementById('accessHHNote');
-  if(!el||!GS_TOTAL_CIA_HH)return;
-  var pct=((GS_ACCESS_HH_COUNT/GS_TOTAL_CIA_HH)*100).toFixed(1);
-  el.textContent=GS_ACCESS_HH_COUNT+' of '+GS_TOTAL_CIA_HH+' active -CIA households ('+pct+'%) have at least one Goldman advisory account';
+  if(!el||!GS_TOTAL_PARTNER_OFFICES)return;
+  var withAccess=GS_ACCESS_LABELS.length;
+  var without=GS_TOTAL_PARTNER_OFFICES-withAccess;
+  var pct=((withAccess/GS_TOTAL_PARTNER_OFFICES)*100).toFixed(1);
+  el.textContent=withAccess+' of '+GS_TOTAL_PARTNER_OFFICES+' partner offices ('+pct+'%) have Goldman access — '+without+' offices do not yet have access';
 })();
 
 // ── Custodian AUM comparison ──────────────────────────────────────────────
