@@ -294,11 +294,26 @@
       <div class="src">Source: Salesforce OASP_FSC__Model__c &bull; Advisory accounts &bull; Transition/Contribution/Distribution/Custodial sleeves excluded</div>
     </div>
     <div class="card">
-      <div class="ct">Goldman Access by Office</div>
-      <div class="cs">Users with Goldman Sachs custodian access — largest to smallest</div>
-      <div style="position:relative;height:490px"><canvas id="accessChart"></canvas></div>
-      <div class="src">Source: Goldman Access Completed.xlsx &bull; 70 users across 9 offices</div>
+      <div class="ct">Registration Types</div>
+      <div class="cs">Account registration breakdown across all active Goldman advisory accounts</div>
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:0 0 200px">
+          <canvas id="regTypeChart" style="max-height:220px"></canvas>
+        </div>
+        <div style="flex:1;min-width:160px;margin-top:4px">
+          <table class="mt" id="regTypeTable"></table>
+        </div>
+      </div>
+      <div class="src">Source: Orion accountType field &bull; Non-sleeve advisory Goldman accounts only &bull; Updated daily</div>
     </div>
+  </div>
+
+  <!-- Goldman Access (full width) -->
+  <div class="card">
+    <div class="ct">Goldman Access by Office</div>
+    <div class="cs">Users with Goldman Sachs custodian access — largest to smallest</div>
+    <div style="position:relative;height:490px"><canvas id="accessChart"></canvas></div>
+    <div class="src">Source: Goldman Access Tracker.xlsx &bull; Updated daily</div>
   </div>
 
 </main>
@@ -411,6 +426,10 @@ const GS_REGS_60=17;
 const GS_WIZARD_90=16;
 const GS_REGS_90=17;
 // GS_NEWACCTS_DATA_END
+// GS_REGTYPES_DATA_START
+const GS_REGTYPES_LABELS=['JTWROS','IRA Rollover','Roth','Transfer on Death','Individual'];
+const GS_REGTYPES_DATA=[6,5,3,2,1];
+// GS_REGTYPES_DATA_END
 
 function applyOrionData(){
   // Gauge SVG — update center text
@@ -557,6 +576,33 @@ new Chart(document.getElementById('originChart'),{
     }
   }
 });
+
+// ── Chart 6: Registration Types donut ────────────────────────────────────
+(function(){
+  const pal=PAL();
+  new Chart(document.getElementById('regTypeChart'),{
+    type:'doughnut',
+    data:{
+      labels:GS_REGTYPES_LABELS,
+      datasets:[{data:GS_REGTYPES_DATA,backgroundColor:pal,borderWidth:2,borderColor:cv('--cb'),hoverBorderWidth:2}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,cutout:'62%',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.parsed} account${ctx.parsed!==1?'s':''}`}},
+        datalabels:{display:false}}
+    }
+  });
+  // Build registration type table
+  const tb=document.getElementById('regTypeTable');
+  tb.innerHTML=`<thead><tr><th>Registration</th><th class="r">Accts</th></tr></thead>`;
+  const tbody=document.createElement('tbody');
+  GS_REGTYPES_LABELS.forEach((lbl,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span class="sw" style="background:${pal[i]}"></span>${lbl}</td><td class="r">${GS_REGTYPES_DATA[i]}</td>`;
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+})();
 
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
