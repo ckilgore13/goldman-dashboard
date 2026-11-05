@@ -340,7 +340,7 @@ function scH(){const m=cv('--tm'),g=cv('--gl');return{x:{grid:{color:g},ticks:{c
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
-const PAL=()=>[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5')];
+const PAL=()=>[cv('--s1'),cv('--s2'),cv('--s3'),cv('--s4'),cv('--s5'),cv('--s6'),cv('--s7'),cv('--s8')];
 
 // Model table
 function buildTable(){
@@ -350,7 +350,7 @@ function buildTable(){
   const tbody=document.createElement('tbody');
   MODELS.forEach((m,i)=>{
     const tr=document.createElement('tr');
-    const aumCell=m.aum>0?`<td class="rb">${fmt$(m.aum)}</td>`:`<td class="r" style="color:var(--tm)">—</td>`;
+    const aumCell=`<td class="rb">${fmt$(m.aum)}</td>`;
     tr.innerHTML=`<td><span class="sw" style="background:${pal[i]}"></span>${m.name}</td><td class="r">${m.count}</td>${aumCell}`;
     tbody.appendChild(tr);
   });
