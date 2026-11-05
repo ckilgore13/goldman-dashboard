@@ -51,6 +51,19 @@
   .cw-lg canvas{max-height:380px}
   .src{font-size:11px;color:var(--tm);margin-top:10px;padding-top:10px;border-top:1px solid var(--gl)}
 
+  /* source footer → hidden, replaced by info icon */
+  .src{display:none}
+  .card{position:relative}
+  .info-btn{position:absolute;top:13px;right:14px;background:none;border:none;color:var(--tm);cursor:pointer;padding:3px;border-radius:4px;display:flex;align-items:center;justify-content:center;line-height:1}
+  .info-btn:hover{color:var(--ts);background:var(--gl)}
+  /* modal */
+  .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;display:none;align-items:center;justify-content:center}
+  .modal-ov.show{display:flex}
+  .modal-box{background:var(--cb);border-radius:12px;padding:26px 28px;max-width:520px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.22);position:relative}
+  .modal-ttl{font-size:14px;font-weight:700;color:var(--tp);margin-bottom:12px;padding-right:28px}
+  .modal-bdy{font-size:12.5px;color:var(--ts);line-height:1.75}
+  .modal-cls{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:22px;color:var(--tm);line-height:1;padding:0 4px}
+  .modal-cls:hover{color:var(--tp)}
   /* model table */
   .mt{width:100%;border-collapse:collapse;font-size:12px}
   .mt th{text-align:left;color:var(--tm);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:5px 7px;border-bottom:2px solid var(--gl)}
@@ -289,13 +302,22 @@
   </div>
 
 </main>
+
+<div class="modal-ov" id="infoModal">
+  <div class="modal-box">
+    <button class="modal-cls" onclick="closeInfoModal()">&#x2715;</button>
+    <div class="modal-ttl" id="modalTitle"></div>
+    <div class="modal-bdy" id="modalBody"></div>
+  </div>
+</div>
+
 <script>
 Chart.register(ChartDataLabels);
 
 // ── Gauge (SVG-based) ─────────────────────────────────────────────────────
 const GS_LIMIT  = 1_000_000_000;
 // GS_ORION_DATA_START
-const GS_AUM=1773859.45;
+const GS_AUM=1753899.69;
 const GS_REGISTRATIONS=17;
 const MODELS=[
   {name:'Dynamic Core Aggressive',count:4,aum:894789.01},
@@ -438,6 +460,29 @@ function applyOrionData(){
 }
 applyOrionData();
 
+// ── Info icons: wire up all .src footers as modal triggers ────────────────
+const INFO_SVG='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+document.querySelectorAll('.card').forEach(function(card){
+  var src=card.querySelector('.src');
+  var ct=card.querySelector('.ct');
+  if(!src||!ct) return;
+  var title=ct.textContent.trim();
+  var html=src.innerHTML;
+  var btn=document.createElement('button');
+  btn.className='info-btn';
+  btn.title='Data source';
+  btn.innerHTML=INFO_SVG;
+  btn.onclick=function(){openInfoModal(title,html);};
+  card.appendChild(btn);
+});
+function openInfoModal(title,html){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalBody').innerHTML=html;
+  document.getElementById('infoModal').classList.add('show');
+}
+function closeInfoModal(){document.getElementById('infoModal').classList.remove('show');}
+document.getElementById('infoModal').addEventListener('click',function(e){if(e.target===this)closeInfoModal();});
+
 // ── Chart 1: New Accounts by Office ─────────────────────────────────────────
 new Chart(document.getElementById('newAccountsChart'),{
   type:'bar',
@@ -515,9 +560,9 @@ new Chart(document.getElementById('originChart'),{
 
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
-const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Omaha','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','Carson Group (Home Office)','BluePrint Wealth'];
-const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,3,2];
-const GS_ACCESS_TOTAL=140;
+const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Omaha','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','BluePrint Wealth'];
+const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,2];
+const GS_ACCESS_TOTAL=137;
 const GS_ACCESS_UPDATED='2026-11-05';
 // GS_ACCESS_DATA_END
 new Chart(document.getElementById('accessChart'),{
