@@ -623,33 +623,6 @@ new Chart(document.getElementById('originChart'),{
   }
 })();
 
-// ── Access HH footer ─────────────────────────────────────────────────────
-(function(){
-  var el=document.getElementById('accessHHNote');
-  if(!el||!GS_TOTAL_CIA_HH)return;
-  var pct=((GS_ACCESS_HH_COUNT/GS_TOTAL_CIA_HH)*100).toFixed(1);
-  el.textContent=GS_ACCESS_HH_COUNT+' of '+GS_TOTAL_CIA_HH+' active -CIA households ('+pct+'%) have at least one Goldman advisory account';
-})();
-
-// ── Custodian AUM comparison ──────────────────────────────────────────────
-(function(){
-  var grid=document.getElementById('custodianAumGrid');
-  if(!grid)return;
-  var custColors=['rgba(208,151,20,0.15)','rgba(42,120,214,0.08)','rgba(27,175,122,0.08)'];
-  var custBorders=['rgba(208,151,20,0.40)',cv('--s1'),cv('--s3')];
-  GS_CUSTODIAN_LABELS.forEach(function(label,i){
-    var aum=GS_CUSTODIAN_AUM[i];
-    var accts=GS_CUSTODIAN_ACCTS[i];
-    var isGs=i===0;
-    var div=document.createElement('div');
-    div.style.cssText='background:var(--sp);border-radius:8px;padding:16px 18px;border:1px solid '+(isGs?'rgba(208,151,20,0.30)':'var(--bd)')+';border-top:3px solid '+custBorders[i];
-    div.innerHTML='<div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:8px">'+label+(isGs?' <span style="font-size:9px;letter-spacing:.04em;color:#e5c040;background:rgba(208,151,20,.18);padding:1px 6px;border-radius:3px;vertical-align:middle">NEW</span>':'')+'</div>'+
-      '<div style="font-size:30px;font-weight:700;line-height:1">'+fmt$(aum)+'</div>'+
-      '<div style="font-size:11px;color:var(--ts);margin-top:5px">'+accts.toLocaleString()+' advisory accounts</div>';
-    grid.appendChild(div);
-  });
-})();
-
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
 const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Omaha','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','BluePrint Wealth'];
@@ -681,6 +654,32 @@ new Chart(document.getElementById('accessChart'),{
       x:{...scH().x,max:Math.ceil(Math.max(...GS_ACCESS_DATA)*1.2),ticks:{...scH().x.ticks,stepSize:Math.ceil(Math.max(...GS_ACCESS_DATA)/4)}},
       y:{...scH().y,ticks:{...scH().y.ticks,autoSkip:false}}}}
 });
+
+// ── Access HH footer ─────────────────────────────────────────────────────
+(function(){
+  var el=document.getElementById('accessHHNote');
+  if(!el||!GS_TOTAL_CIA_HH)return;
+  var pct=((GS_ACCESS_HH_COUNT/GS_TOTAL_CIA_HH)*100).toFixed(1);
+  el.textContent=GS_ACCESS_HH_COUNT+' of '+GS_TOTAL_CIA_HH+' active -CIA households ('+pct+'%) have at least one Goldman advisory account';
+})();
+
+// ── Custodian AUM comparison ──────────────────────────────────────────────
+(function(){
+  var grid=document.getElementById('custodianAumGrid');
+  if(!grid)return;
+  var custBorders=['rgba(208,151,20,0.40)',cv('--s1'),cv('--s3')];
+  GS_CUSTODIAN_LABELS.forEach(function(label,i){
+    var aum=GS_CUSTODIAN_AUM[i];
+    var accts=GS_CUSTODIAN_ACCTS[i];
+    var isGs=i===0;
+    var div=document.createElement('div');
+    div.style.cssText='background:var(--sp);border-radius:8px;padding:16px 18px;border:1px solid '+(isGs?'rgba(208,151,20,0.30)':'var(--bd)')+';border-top:3px solid '+custBorders[i];
+    div.innerHTML='<div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:8px">'+label+(isGs?' <span style="font-size:9px;letter-spacing:.04em;color:#e5c040;background:rgba(208,151,20,.18);padding:1px 6px;border-radius:3px;vertical-align:middle">NEW</span>':'')+'</div>'+
+      '<div style="font-size:30px;font-weight:700;line-height:1">'+fmt$(aum)+'</div>'+
+      '<div style="font-size:11px;color:var(--ts);margin-top:5px">'+accts.toLocaleString()+' advisory accounts</div>';
+    grid.appendChild(div);
+  });
+})();
 </script>
 </body>
 </html>
