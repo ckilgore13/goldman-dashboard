@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -86,7 +86,7 @@
     </div>
   </div>
   <div class="hr">
-    <span class="upd">Last updated: November 5, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
+    <span class="upd">Last updated: November 6, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
     <button class="tbtn" onclick="toggleTheme()">Toggle Dark Mode</button>
   </div>
 </header>
@@ -339,20 +339,20 @@ Chart.register(ChartDataLabels);
 // ── Gauge (SVG-based) ─────────────────────────────────────────────────────
 const GS_LIMIT  = 1_000_000_000;
 // GS_ORION_DATA_START
-const GS_AUM=1753899.69;
-const GS_REGISTRATIONS=17;
+const GS_AUM=1638049.46;
+const GS_REGISTRATIONS=18;
 const MODELS=[
-  {name:'Dynamic Core Aggressive',count:4,aum:894789.01},
-  {name:'Legacy Holdings',count:2,aum:760093.98},
-  {name:'Mission US Growth',count:1,aum:88245.09},
-  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10771.61},
+  {name:'Dynamic Core Aggressive',count:4,aum:854005.3},
+  {name:'Legacy Holdings',count:3,aum:690837.03},
+  {name:'Mission US Growth',count:1,aum:83099.04},
+  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10108.09},
   {name:'Model Assignment Pending',count:7,aum:0}
 ];
 const GS_AUM_BY_OFFICE_LABELS=['BMY Wealth'];
-const GS_AUM_BY_OFFICE_DATA=[1753899.69];
+const GS_AUM_BY_OFFICE_DATA=[1638049.46];
 const GS_LS_AUM=0;
 const GS_LS_ACCTS=0;
-const GS_ORION_UPDATED='2026-11-05';
+const GS_ORION_UPDATED='2026-11-06';
 // GS_ORION_DATA_END
 const GS_PCT    = GS_AUM / GS_LIMIT;
 const GS_WARN   = 0.75;
@@ -419,23 +419,23 @@ buildTable();
 
 // GS_ORIGIN_DATA_START
 const GS_ORIGIN_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors'];
-const GS_ORIGIN_WIZARD=[14,1,1];
+const GS_ORIGIN_WIZARD=[15,1,1];
 const GS_ORIGIN_CUSTODIAN=[0,1,0];
 // GS_ORIGIN_DATA_END
 
 // GS_NEWACCTS_DATA_START
 const GS_NEWACCTS_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors'];
-const GS_NEWACCTS_DATA_30=[14,1,1];
-const GS_WIZARD_30=16;
-const GS_REGS_30=17;
-const GS_WIZARD_60=16;
-const GS_REGS_60=17;
-const GS_WIZARD_90=16;
-const GS_REGS_90=17;
+const GS_NEWACCTS_DATA_30=[15,1,1];
+const GS_WIZARD_30=17;
+const GS_REGS_30=18;
+const GS_WIZARD_60=17;
+const GS_REGS_60=18;
+const GS_WIZARD_90=17;
+const GS_REGS_90=18;
 // GS_NEWACCTS_DATA_END
 // GS_REGTYPES_DATA_START
-const GS_REGTYPES_LABELS=['JTWROS','IRA Rollover','Roth','Transfer on Death','Individual'];
-const GS_REGTYPES_DATA=[6,5,3,2,1];
+const GS_REGTYPES_LABELS=['JTWROS','IRA Rollover','Transfer on Death','Roth','Individual'];
+const GS_REGTYPES_DATA=[6,5,3,3,1];
 const GS_CUSTODIAN_REG_LABELS=['Individual'];
 const GS_CUSTODIAN_REG_DATA=[1];
 // GS_REGTYPES_DATA_END
@@ -620,19 +620,19 @@ new Chart(document.getElementById('originChart'),{
 
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
-const GS_ACCESS_LABELS=['CWMG-SW','BMY','CWMG-Omaha','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','BluePrint Wealth'];
-const GS_ACCESS_DATA=[21,13,11,11,11,11,10,8,7,6,6,6,6,5,3,2];
-const GS_ACCESS_TOTAL=137;
-const GS_ACCESS_UPDATED='2026-11-05';
+const GS_ACCESS_LABELS=['CWMG-SW','CWMG-Omaha','BMY','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','Bain Wealth Management','CWMG-Bedford','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','BluePrint Wealth'];
+const GS_ACCESS_DATA=[21,18,13,11,11,11,10,8,7,6,6,6,6,5,3,2];
+const GS_ACCESS_TOTAL=144;
+const GS_ACCESS_UPDATED='2026-11-06';
 // GS_ACCESS_DATA_END
 // GS_ACCESS_HH_DATA_START
 const GS_TOTAL_PARTNER_OFFICES=258;
 // GS_ACCESS_HH_DATA_END
 // GS_CUSTODIAN_AUM_DATA_START
 const GS_CUSTODIAN_LABELS=['Goldman Sachs','Fidelity','Schwab'];
-const GS_CUSTODIAN_AUM=[1753899.69,17689336189.36,34723358913.82];
-const GS_CUSTODIAN_ACCTS=[17,112668,225915];
-const GS_CUSTODIAN_AUM_UPDATED='2026-11-05';
+const GS_CUSTODIAN_AUM=[1638049.46,17436646717.46,34071537587.08];
+const GS_CUSTODIAN_ACCTS=[18,112711,225830];
+const GS_CUSTODIAN_AUM_UPDATED='2026-11-06';
 // GS_CUSTODIAN_AUM_DATA_END
 new Chart(document.getElementById('accessChart'),{
   type:'bar',
