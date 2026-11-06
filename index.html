@@ -72,6 +72,16 @@
   .mt .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--ts)}
   .mt .rb{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--tp)}
   .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;flex-shrink:0}
+  .aum-drawer{background:var(--cb);border-radius:10px;box-shadow:var(--sh);border:1px solid var(--bd);margin-bottom:20px;overflow:hidden}
+  .aum-drawer summary{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;list-style:none;user-select:none}
+  .aum-drawer summary::-webkit-details-marker{display:none}
+  .aum-drawer summary:hover{background:var(--gl)}
+  .aum-drawer-arrow{font-size:9px;color:var(--tm);transition:transform .18s;flex-shrink:0}
+  .aum-drawer[open] .aum-drawer-arrow{transform:rotate(90deg)}
+  .aum-drawer-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tm)}
+  .aum-drawer-delta{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+  .aum-drawer-date{font-size:11px;color:var(--tm);margin-left:auto}
+  .aum-drawer-body{padding:12px 18px 14px;border-top:1px solid var(--gl)}
 </style>
 </head>
 <body>
@@ -115,6 +125,17 @@
       <div class="tsub">BMY Wealth, CWM Omaha, CWM Hagerstown</div>
     </div>
   </div>
+
+  <!-- AUM Change Drawer -->
+  <details class="aum-drawer" id="aumDrawer">
+    <summary>
+      <span class="aum-drawer-arrow">&#9658;</span>
+      <span class="aum-drawer-label">AUM Change</span>
+      <span class="aum-drawer-delta" id="aumDrawerDelta">—</span>
+      <span class="aum-drawer-date" id="aumDrawerDate"></span>
+    </summary>
+    <div class="aum-drawer-body" id="aumDrawerBody"></div>
+  </details>
 
   <!-- Gauge -->
   <div class="card" style="margin-bottom:20px">
@@ -354,6 +375,11 @@ const GS_LS_AUM=0;
 const GS_LS_ACCTS=0;
 const GS_ORION_UPDATED='2026-11-06';
 // GS_ORION_DATA_END
+// GS_PREV_DATA_START
+const GS_PREV_AUM=1744445;
+const GS_PREV_DATE='2026-11-05';
+const PREV_MODELS=null;
+// GS_PREV_DATA_END
 const GS_PCT    = GS_AUM / GS_LIMIT;
 const GS_WARN   = 0.75;
 const GS_CRIT   = 0.90;
@@ -416,6 +442,36 @@ function buildTable(){
   tb.appendChild(tfoot);
 }
 buildTable();
+
+// AUM Change Drawer
+(function(){
+  var el=document.getElementById('aumDrawerDelta');
+  if(!el||typeof GS_PREV_AUM==='undefined'||!GS_PREV_AUM)return;
+  var delta=GS_AUM-GS_PREV_AUM;
+  var pct=(delta/GS_PREV_AUM*100).toFixed(1);
+  var color=delta>=0?'var(--s3)':'#e34948';
+  var arrow=delta>=0?'▲':'▼';
+  el.style.color=color;
+  el.textContent=arrow+' '+fmt$(Math.abs(delta))+' ('+(delta>=0?'+':'')+pct+'%)';
+  var dateEl=document.getElementById('aumDrawerDate');
+  if(dateEl&&typeof GS_PREV_DATE!=='undefined'&&GS_PREV_DATE)dateEl.textContent=GS_PREV_DATE+' → '+GS_ORION_UPDATED;
+  var body=document.getElementById('aumDrawerBody');
+  if(!body)return;
+  if(typeof PREV_MODELS!=='undefined'&&PREV_MODELS&&PREV_MODELS.length){
+    var pm={};PREV_MODELS.forEach(function(m){pm[m.name]=m;});
+    var h='<table class="mt"><thead><tr><th>Model</th><th class="r">Prior AUM</th><th class="rb">Today</th><th class="r">Change</th></tr></thead><tbody>';
+    MODELS.forEach(function(m){
+      var p=pm[m.name];var d=p?m.aum-p.aum:null;
+      var dc=d===null?'var(--tm)':d>=0?'var(--s3)':'#e34948';
+      var ds=d===null?'—':(d>=0?'▲ +':'▼ ')+fmt$(Math.abs(d));
+      h+='<tr><td>'+m.name+'</td><td class="r">'+(p?fmt$(p.aum):'—')+'</td><td class="rb">'+fmt$(m.aum)+'</td><td class="r" style="color:'+dc+';font-weight:600">'+ds+'</td></tr>';
+    });
+    h+='</tbody></table>';
+    body.innerHTML=h;
+  }else{
+    body.innerHTML='<div style="font-size:12px;color:var(--ts)">Model-level history begins on next sync. Total: '+fmt$(GS_PREV_AUM)+' → '+fmt$(GS_AUM)+'</div>';
+  }
+})();
 
 // GS_ORIGIN_DATA_START
 const GS_ORIGIN_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors'];
