@@ -82,6 +82,13 @@
   .aum-drawer-delta{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
   .aum-drawer-date{font-size:11px;color:var(--tm);margin-left:auto}
   .aum-drawer-body{padding:12px 18px 14px;border-top:1px solid var(--gl)}
+  .aum-off-detail{border-radius:6px;overflow:hidden;margin-bottom:3px}
+  .aum-off-detail summary::-webkit-details-marker{display:none}
+  .aum-off-detail summary{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;list-style:none;user-select:none;border-radius:6px;background:var(--sp)}
+  .aum-off-detail summary:hover{background:var(--gl)}
+  .aum-off-arr{display:inline-block;transition:transform .15s;font-size:9px;color:var(--tm);flex-shrink:0}
+  .aum-off-detail[open] .aum-off-arr{transform:rotate(90deg)}
+  .aum-off-body{padding:8px 8px 6px 22px;border-top:1px solid var(--gl)}
 </style>
 </head>
 <body>
@@ -468,18 +475,74 @@ buildTable();
   if(cause){
     h+='<div style="font-size:12px;color:var(--ts);margin-bottom:10px;padding:8px 10px;background:var(--sp);border-radius:6px;border-left:3px solid '+(delta>=0?'var(--s3)':'#e34948')+'">'+(delta>=0?'📈':'📉')+' <strong>Cause:</strong> '+cause+'</div>';
   }
-  if(typeof PREV_MODELS!=='undefined'&&PREV_MODELS&&PREV_MODELS.length){
-    var pm={};PREV_MODELS.forEach(function(m){pm[m.name]=m;});
-    h+='<table class="mt"><thead><tr><th>Model</th><th class="r">Prior AUM</th><th class="rb">Today</th><th class="r">Change</th></tr></thead><tbody>';
-    MODELS.forEach(function(m){
-      var p=pm[m.name];var d=p?m.aum-p.aum:null;
-      var dc=d===null?'var(--tm)':d>=0?'var(--s3)':'#e34948';
-      var ds=d===null?'—':(d>=0?'▲ +':'▼ ')+fmt$(Math.abs(d));
-      h+='<tr><td>'+m.name+'</td><td class="r">'+(p?fmt$(p.aum):'—')+'</td><td class="rb">'+fmt$(m.aum)+'</td><td class="r" style="color:'+dc+';font-weight:600">'+ds+'</td></tr>';
+  // Office-level breakdown with expandable registrations
+  var hasReg=typeof GS_REG_DETAILS!=='undefined'&&GS_REG_DETAILS&&GS_REG_DETAILS.length;
+  var hasPrev=typeof GS_PREV_REG_DETAILS!=='undefined'&&GS_PREV_REG_DETAILS&&GS_PREV_REG_DETAILS.length;
+  if(hasReg){
+    // Build current office map
+    var offMap={};
+    GS_REG_DETAILS.forEach(function(r){
+      if(!offMap[r.office])offMap[r.office]={aum:0,regs:[]};
+      offMap[r.office].aum+=r.aum;
+      offMap[r.office].regs.push(r);
     });
-    h+='</tbody></table>';
+    // Build prev lookup by id
+    var prevById={};
+    var prevOffMap={};
+    if(hasPrev){
+      GS_PREV_REG_DETAILS.forEach(function(r){
+        prevById[r.id]=r.aum;
+        if(!prevOffMap[r.office])prevOffMap[r.office]={aum:0};
+        prevOffMap[r.office].aum+=r.aum;
+      });
+    }
+    // Sort offices by abs delta desc
+    var offices=Object.keys(offMap).sort(function(a,b){
+      var da=hasPrev&&prevOffMap[a]?Math.abs(offMap[a].aum-prevOffMap[a].aum):0;
+      var db=hasPrev&&prevOffMap[b]?Math.abs(offMap[b].aum-prevOffMap[b].aum):0;
+      return db-da||offMap[b].aum-offMap[a].aum;
+    });
+    h+='<div style="display:flex;flex-direction:column;gap:3px">';
+    offices.forEach(function(off){
+      var curr=offMap[off];
+      var prev=hasPrev?prevOffMap[off]:null;
+      var od=prev!=null?curr.aum-prev.aum:null;
+      var oc=od===null?'var(--tm)':od>=0?'var(--s3)':'#e34948';
+      var os=od===null?'':(od>=0?'&#9650; +':'&#9660; ')+fmt$(Math.abs(od));
+      // Sort regs by abs delta desc
+      var regs=curr.regs.slice().sort(function(a,b){
+        var da=prevById[a.id]!=null?Math.abs(a.aum-prevById[a.id]):0;
+        var db=prevById[b.id]!=null?Math.abs(b.aum-prevById[b.id]):0;
+        return db-da||b.aum-a.aum;
+      });
+      h+='<details class="aum-off-detail">';
+      h+='<summary><span class="aum-off-arr">&#9658;</span>';
+      h+='<span style="font-size:13px;font-weight:600;color:var(--tp)">'+off+'</span>';
+      if(os)h+='<span style="margin-left:auto;font-size:13px;font-weight:700;color:'+oc+'">'+os+'</span>';
+      h+='<span style="font-size:11px;color:var(--tm);'+(os?'margin-left:8px':'margin-left:auto')+'">'+fmt$(curr.aum)+'</span>';
+      h+='</summary>';
+      h+='<div class="aum-off-body">';
+      h+='<table class="mt"><thead><tr><th>Registration</th><th>Type</th>';
+      if(hasPrev)h+='<th class="r">Prior AUM</th>';
+      h+='<th class="rb">Today</th>';
+      if(hasPrev)h+='<th class="r">Change</th>';
+      h+='</tr></thead><tbody>';
+      regs.forEach(function(r){
+        var prv=prevById[r.id]!=null?prevById[r.id]:null;
+        var rd=prv!=null?r.aum-prv:null;
+        var rc=rd===null?'var(--tm)':rd>=0?'var(--s3)':'#e34948';
+        var rs=rd===null?'—':(rd>=0?'&#9650; +':'&#9660; ')+fmt$(Math.abs(rd));
+        h+='<tr><td style="font-size:11px">'+r.name+'</td><td style="font-size:11px;color:var(--ts)">'+r.regType+'</td>';
+        if(hasPrev)h+='<td class="r">'+(prv!=null?fmt$(prv):'—')+'</td>';
+        h+='<td class="rb">'+fmt$(r.aum)+'</td>';
+        if(hasPrev)h+='<td class="r" style="color:'+rc+';font-weight:600">'+rs+'</td>';
+        h+='</tr>';
+      });
+      h+='</tbody></table></div></details>';
+    });
+    h+='</div>';
   }else if(!cause){
-    h+='<div style="font-size:12px;color:var(--ts)">Model-level history begins on next sync. Total: '+fmt$(GS_PREV_AUM)+' → '+fmt$(GS_AUM)+'</div>';
+    h+='<div style="font-size:12px;color:var(--ts)">Office breakdown available after first sync. Total: '+fmt$(GS_PREV_AUM)+' → '+fmt$(GS_AUM)+'</div>';
   }
   body.innerHTML=h;
 })();
@@ -586,7 +649,7 @@ new Chart(document.getElementById('newAccountsChart'),{
   options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},
     tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} account${ctx.parsed.y!==1?'s':''} (all within 30d of launch)`}},
     datalabels:{display:true,anchor:'end',align:'top',color:cv('--ts'),font:{weight:'600'},formatter:v=>v}},
-    scales:{...scV(),y:{...scV().y,max:16,ticks:{...scV().y.ticks,stepSize:4}}}}
+    scales:{...scV(),y:{...scV().y,max:Math.ceil(Math.max(...GS_NEWACCTS_DATA_30)*1.3),ticks:{...scV().y.ticks,stepSize:Math.max(1,Math.ceil(Math.max(...GS_NEWACCTS_DATA_30)/4))}}}}
 });
 
 // ── Chart 2: AUM by Office (FA-derived, consistent with tile) ─────────────
@@ -701,6 +764,17 @@ const GS_CUSTODIAN_AUM=[1933427.89,17213021919.03,33789491758.51];
 const GS_CUSTODIAN_ACCTS=[20,112700,225812];
 const GS_CUSTODIAN_AUM_UPDATED='2026-11-09';
 // GS_CUSTODIAN_AUM_DATA_END
+// GS_PREV_CUSTODIAN_DATA_START
+const GS_PREV_CUSTODIAN_AUM=null;
+const GS_PREV_CUSTODIAN_ACCTS=null;
+const GS_PREV_CUSTODIAN_DATE='';
+// GS_PREV_CUSTODIAN_DATA_END
+// GS_REG_DATA_START
+const GS_REG_DETAILS=[];
+// GS_REG_DATA_END
+// GS_PREV_REG_DATA_START
+const GS_PREV_REG_DETAILS=[];
+// GS_PREV_REG_DATA_END
 new Chart(document.getElementById('accessChart'),{
   type:'bar',
   data:{
@@ -731,15 +805,22 @@ new Chart(document.getElementById('accessChart'),{
   var grid=document.getElementById('custodianAumGrid');
   if(!grid)return;
   var custBorders=['rgba(208,151,20,0.40)',cv('--s1'),cv('--s3')];
+  var hasPrevCust=typeof GS_PREV_CUSTODIAN_AUM!=='undefined'&&GS_PREV_CUSTODIAN_AUM&&Array.isArray(GS_PREV_CUSTODIAN_AUM);
   GS_CUSTODIAN_LABELS.forEach(function(label,i){
     var aum=GS_CUSTODIAN_AUM[i];
     var accts=GS_CUSTODIAN_ACCTS[i];
     var isGs=i===0;
+    var prevAum=hasPrevCust?GS_PREV_CUSTODIAN_AUM[i]:null;
+    var delta=prevAum!=null?aum-prevAum:null;
+    var dc=delta===null?'':delta>=0?'var(--s3)':'#e34948';
+    var ds=delta===null?'':(delta>=0?'▲ +':'▼ ')+fmt$(Math.abs(delta));
+    var prevDate=typeof GS_PREV_CUSTODIAN_DATE!=='undefined'&&GS_PREV_CUSTODIAN_DATE?GS_PREV_CUSTODIAN_DATE:'';
     var div=document.createElement('div');
     div.style.cssText='background:var(--sp);border-radius:8px;padding:16px 18px;border:1px solid '+(isGs?'rgba(208,151,20,0.30)':'var(--bd)')+';border-top:3px solid '+custBorders[i];
     div.innerHTML='<div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tm);margin-bottom:8px">'+label+(isGs?' <span style="font-size:9px;letter-spacing:.04em;color:#e5c040;background:rgba(208,151,20,.18);padding:1px 6px;border-radius:3px;vertical-align:middle">NEW</span>':'')+'</div>'+
       '<div style="font-size:30px;font-weight:700;line-height:1">'+fmt$(aum)+'</div>'+
-      '<div style="font-size:11px;color:var(--ts);margin-top:5px">'+accts.toLocaleString()+' registrations</div>';
+      (ds?'<div style="font-size:12px;font-weight:700;color:'+dc+';margin-top:5px">'+ds+(prevDate?' <span style="font-size:10px;font-weight:400;color:var(--tm)">vs '+prevDate+'</span>':'')+'</div>':'')+
+      '<div style="font-size:11px;color:var(--ts);margin-top:'+(ds?'3':'5')+'px">'+accts.toLocaleString()+' registrations</div>';
     grid.appendChild(div);
   });
 })();
