@@ -393,6 +393,12 @@ const PREV_MODELS=[{name:'Dynamic Core Aggressive',count:4,aum:854005.3},
 ];
 const GS_PREV_CAUSE='Market price movement -- no significant cash flows detected. Change reflects daily equity price fluctuations across Goldman Sachs holdings.';
 // GS_PREV_DATA_END
+// GS_REG_DATA_START
+const GS_REG_DETAILS=[];
+// GS_REG_DATA_END
+// GS_PREV_REG_DATA_START
+const GS_PREV_REG_DETAILS=[];
+// GS_PREV_REG_DATA_END
 const GS_PCT    = GS_AUM / GS_LIMIT;
 const GS_WARN   = 0.75;
 const GS_CRIT   = 0.90;
@@ -769,12 +775,6 @@ const GS_PREV_CUSTODIAN_AUM=null;
 const GS_PREV_CUSTODIAN_ACCTS=null;
 const GS_PREV_CUSTODIAN_DATE='';
 // GS_PREV_CUSTODIAN_DATA_END
-// GS_REG_DATA_START
-const GS_REG_DETAILS=[];
-// GS_REG_DATA_END
-// GS_PREV_REG_DATA_START
-const GS_PREV_REG_DETAILS=[];
-// GS_PREV_REG_DATA_END
 new Chart(document.getElementById('accessChart'),{
   type:'bar',
   data:{
