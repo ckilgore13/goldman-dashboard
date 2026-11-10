@@ -369,7 +369,7 @@ const GS_LIMIT  = 1_000_000_000;
 // GS_ORION_DATA_START
 const GS_AUM=2586461.8;
 const GS_REGISTRATIONS=22;
-const GS_SLEEVE_COUNT=40;
+const GS_SLEEVED_REGS=0;
 const MODELS=[
   {name:'Dynamic Core Aggressive',count:4,aum:881079.68},
   {name:'Legacy Holdings',count:3,aum:679711.44},
@@ -655,7 +655,7 @@ function applyOrionData(){
   const tileRegs=document.querySelector('.tile:nth-child(1) .tv');
   if(tileRegs)tileRegs.textContent=GS_REGISTRATIONS;
   const tileRegsSub=document.querySelector('.tile:nth-child(1) .tsub');
-  if(tileRegsSub&&typeof GS_SLEEVE_COUNT!=='undefined')tileRegsSub.textContent=(GS_REGISTRATIONS+GS_SLEEVE_COUNT)+' total accounts ('+GS_SLEEVE_COUNT+' sleeved)';
+  if(tileRegsSub&&typeof GS_SLEEVED_REGS!=='undefined')tileRegsSub.textContent=GS_REGISTRATIONS+' registrations ('+GS_SLEEVED_REGS+' sleeved, '+(GS_REGISTRATIONS-GS_SLEEVED_REGS)+' not)';
   const tileWiz=document.querySelector('.tile:nth-child(3) .tv');
   if(tileWiz)tileWiz.textContent=GS_WIZARD_30;
   // L/S card
@@ -831,13 +831,13 @@ const GS_TOTAL_PARTNER_OFFICES=258;
 // GS_ACCESS_HH_DATA_END
 // GS_CUSTODIAN_AUM_DATA_START
 const GS_CUSTODIAN_LABELS=['Goldman Sachs','Fidelity','Schwab'];
-const GS_CUSTODIAN_AUM=[2586461.8,17482650601.52,34319233696.82];
-const GS_CUSTODIAN_ACCTS=[22,112814,225965];
+const GS_CUSTODIAN_AUM=[2586461.8,17528384658.47,34404174419.39];
+const GS_CUSTODIAN_ACCTS=[22,112834,225991];
 const GS_CUSTODIAN_AUM_UPDATED='2026-11-10';
 // GS_CUSTODIAN_AUM_DATA_END
 // GS_PREV_CUSTODIAN_DATA_START
-const GS_PREV_CUSTODIAN_AUM=[2586461.8,17435054926.27,34242326283.97];
-const GS_PREV_CUSTODIAN_ACCTS=[22,112815,225968];
+const GS_PREV_CUSTODIAN_AUM=[2586461.8,17482650601.52,34319233696.82];
+const GS_PREV_CUSTODIAN_ACCTS=[22,112814,225965];
 const GS_PREV_CUSTODIAN_DATE='2026-11-09';
 // GS_PREV_CUSTODIAN_DATA_END
 new Chart(document.getElementById('accessChart'),{
