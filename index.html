@@ -103,7 +103,7 @@
     </div>
   </div>
   <div class="hr">
-    <span class="upd">Last updated: November 10, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
+    <span class="upd">Last updated: November 11, 2026 &bull; SF + Orion validated &bull; AUM match: ✓</span>
     <button class="tbtn" onclick="toggleTheme()">Toggle Dark Mode</button>
   </div>
 </header>
@@ -367,27 +367,28 @@ Chart.register(ChartDataLabels);
 // ── Gauge (SVG-based) ─────────────────────────────────────────────────────
 const GS_LIMIT  = 1_000_000_000;
 // GS_ORION_DATA_START
-const GS_AUM=2586461.8;
+const GS_AUM=2545516.71;
 const GS_REGISTRATIONS=22;
-const GS_SLEEVED_REGS=11;
+const GS_SLEEVED_REGS=12;
 const MODELS=[
-  {name:'Dynamic Core Aggressive',count:4,aum:881079.68},
-  {name:'Legacy Holdings',count:3,aum:679711.44},
+  {name:'Dynamic Core Aggressive',count:4,aum:877981.47},
   {name:'Dynamic Core Growth',count:1,aum:650000},
-  {name:'Model Assignment Pending',count:9,aum:278530.27},
-  {name:'Mission US Growth',count:1,aum:86623.12},
-  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10517.29},
-  {name:'Structured Notes',count:1,aum:0}
+  {name:'Legacy Holdings',count:3,aum:643447.38},
+  {name:'Market Leaders',count:1,aum:277636.26},
+  {name:'Mission US Growth',count:1,aum:86021.43},
+  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10430.17},
+  {name:'Structured Notes',count:1,aum:0},
+  {name:'Model Assignment Pending',count:8,aum:0}
 ];
 const GS_AUM_BY_OFFICE_LABELS=['BMY Wealth','Diamond Wealth Advisors'];
-const GS_AUM_BY_OFFICE_DATA=[2307931.53,278530.27];
+const GS_AUM_BY_OFFICE_DATA=[2267880.45,277636.26];
 const GS_LS_AUM=0;
 const GS_LS_ACCTS=0;
-const GS_ORION_UPDATED='2026-11-10';
+const GS_ORION_UPDATED='2026-11-11';
 // GS_ORION_DATA_END
 // GS_PREV_DATA_START
-const GS_PREV_AUM=1933427.89;
-const GS_PREV_DATE='2026-11-09';
+const GS_PREV_AUM=2586461.8;
+const GS_PREV_DATE='2026-11-10';
 const PREV_MODELS=[{name:'Dynamic Core Aggressive',count:4,aum:881079.68},
   {name:'Legacy Holdings',count:3,aum:679711.44},
   {name:'Dynamic Core Growth',count:1,aum:650000},
@@ -400,7 +401,32 @@ const GS_PREV_CAUSE='Market price movement -- no significant cash flows detected
 // GS_PREV_DATA_END
 // GS_REG_DATA_START
 const GS_REG_DETAILS=[
-  {id:'1912336',name:'Justin and MIKAH Haschke and TAYLOR',office:'BMY Wealth',aum:779179.35,regType:'JTWROS'},
+  {id:'1912336',name:'Justin and MIKAH Haschke and TAYLOR',office:'BMY Wealth',aum:776439.97,regType:'JTWROS'},
+  {id:'1929506',name:'Bradley and Kimberley Owens and Owens',office:'BMY Wealth',aum:650000.00,regType:'JTWROS'},
+  {id:'1905984',name:'Justin Haschke',office:'BMY Wealth',aum:453357.09,regType:'IRA Rollover'},
+  {id:'1930375',name:'Brian Swanson',office:'Diamond Wealth Advisors',aum:277636.26,regType:'IRA Rollover'},
+  {id:'1907924',name:'Justin Haschke',office:'BMY Wealth',aum:190090.29,regType:'Roth'},
+  {id:'1912599',name:'Justin Haschke',office:'BMY Wealth',aum:86021.43,regType:'IRA Rollover'},
+  {id:'1918941',name:'Ross Billings',office:'BMY Wealth',aum:48150.41,regType:'IRA Rollover'},
+  {id:'1918936',name:'Ross Billings',office:'BMY Wealth',aum:27661.22,regType:'Roth'},
+  {id:'1912643',name:'Mikah Taylor',office:'BMY Wealth',aum:25729.87,regType:'Roth'},
+  {id:'1914915',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:4692.05,regType:'JTWROS'},
+  {id:'1914931',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:2869.06,regType:'JTWROS'},
+  {id:'1914937',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:2869.06,regType:'JTWROS'},
+  {id:'1929437',name:'Gary Klein',office:'BMY Wealth',aum:0.0,regType:'IRA Rollover'},
+  {id:'1928671',name:'Jana Klein',office:'BMY Wealth',aum:0.0,regType:'IRA Rollover'},
+  {id:'1925725',name:'Kandace Gordy',office:'CWMG Omaha',aum:0.0,regType:'Transfer on Death'},
+  {id:'1929430',name:'Jeffrey Maynard',office:'CWMG SW',aum:0.0,regType:'IRA Rollover'},
+  {id:'1928672',name:'Gary Klein',office:'BMY Wealth',aum:0.0,regType:'Roth'},
+  {id:'1922949',name:'Curtis and Genna Jennings and Jennings',office:'BMY Wealth',aum:0.0,regType:'JTWROS'},
+  {id:'1910697',name:'Matthew Wiess',office:'BMY Wealth',aum:0.0,regType:'IRA Rollover'},
+  {id:'1925713',name:'Kandace Lynette Gordy Indv Kandi',office:'CWMG Omaha',aum:0.0,regType:'Individual'},
+  {id:'1928092',name:'Caroline Diebolt',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'},
+  {id:'1926863',name:'Amanda Srader',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'}
+];
+// GS_REG_DATA_END
+// GS_PREV_REG_DATA_START
+const GS_PREV_REG_DETAILS=[{id:'1912336',name:'Justin and MIKAH Haschke and TAYLOR',office:'BMY Wealth',aum:779179.35,regType:'JTWROS'},
   {id:'1929506',name:'Bradley and Kimberley Owens and Owens',office:'BMY Wealth',aum:650000.00,regType:'JTWROS'},
   {id:'1905984',name:'Justin Haschke',office:'BMY Wealth',aum:479518.59,regType:'IRA Rollover'},
   {id:'1926819',name:'Brian Swanson',office:'Diamond Wealth Advisors',aum:278530.27,regType:'IRA Rollover'},
@@ -422,31 +448,6 @@ const GS_REG_DETAILS=[
   {id:'1925713',name:'Kandace Lynette Gordy Indv Kandi',office:'CWMG Omaha',aum:0.0,regType:'Individual'},
   {id:'1928092',name:'Caroline Diebolt',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'},
   {id:'1926863',name:'Amanda Srader',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'}
-];
-// GS_REG_DATA_END
-// GS_PREV_REG_DATA_START
-const GS_PREV_REG_DETAILS=[
-  {id:'1912336',name:'Justin and MIKAH Haschke and TAYLOR',office:'BMY Wealth',aum:758756.68,regType:'JTWROS'},
-  {id:'1905984',name:'Justin Haschke',office:'BMY Wealth',aum:500838.34,regType:'IRA Rollover'},
-  {id:'1926819',name:'Brian Swanson',office:'Diamond Wealth Advisors',aum:271866.42,regType:'IRA Rollover'},
-  {id:'1907924',name:'Justin Haschke',office:'BMY Wealth',aum:208445.09,regType:'Roth'},
-  {id:'1912599',name:'Justin Haschke',office:'BMY Wealth',aum:84070.64,regType:'IRA Rollover'},
-  {id:'1918941',name:'Ross Billings',office:'BMY Wealth',aum:47046.86,regType:'IRA Rollover'},
-  {id:'1918936',name:'Ross Billings',office:'BMY Wealth',aum:27030.93,regType:'Roth'},
-  {id:'1912643',name:'Mikah Taylor',office:'BMY Wealth',aum:25142.52,regType:'Roth'},
-  {id:'1914915',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:4601.25,regType:'JTWROS'},
-  {id:'1914931',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:2814.58,regType:'JTWROS'},
-  {id:'1914937',name:'Justin and Mikah Haschke and Taylor',office:'BMY Wealth',aum:2814.58,regType:'JTWROS'},
-  {id:'1928092',name:'Caroline Diebolt',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'},
-  {id:'1926863',name:'Amanda Srader',office:'BMY Wealth',aum:0.0,regType:'Transfer on Death'},
-  {id:'1928671',name:'Jana Klein',office:'BMY Wealth',aum:0.0,regType:'IRA Rollover'},
-  {id:'1928672',name:'Gary Klein',office:'BMY Wealth',aum:0.0,regType:'Roth'},
-  {id:'1910697',name:'Matthew Wiess',office:'BMY Wealth',aum:0.0,regType:'IRA Rollover'},
-  {id:'1925725',name:'Kandace Gordy',office:'CWMG Omaha',aum:0.0,regType:'Transfer on Death'},
-  {id:'1922949',name:'Curtis and Genna Jennings and Jennings',office:'BMY Wealth',aum:0.0,regType:'JTWROS'},
-  {id:'1925851',name:'Bradley and Kimberley Owens and Owens',office:'BMY Wealth',aum:0.0,regType:'JTWROS'},
-  {id:'1925713',name:'Kandace Lynette Gordy Indv Kandi',office:'CWMG Omaha',aum:0.0,regType:'Individual'}
-
 ];
 // GS_PREV_REG_DATA_END
 const GS_PCT    = GS_AUM / GS_LIMIT;
@@ -617,13 +618,13 @@ buildTable();
 })();
 
 // GS_ORIGIN_DATA_START
-const GS_ORIGIN_LABELS=['BMY Wealth','CWMG Omaha','CWMG SW','Diamond Wealth Advisors'];
+const GS_ORIGIN_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors','CWMG SW'];
 const GS_ORIGIN_WIZARD=[18,1,1,1];
 const GS_ORIGIN_CUSTODIAN=[0,1,0,0];
 // GS_ORIGIN_DATA_END
 
 // GS_NEWACCTS_DATA_START
-const GS_NEWACCTS_LABELS=['BMY Wealth','CWMG Omaha','CWMG SW','Diamond Wealth Advisors'];
+const GS_NEWACCTS_LABELS=['BMY Wealth','CWMG Omaha','Diamond Wealth Advisors','CWMG SW'];
 const GS_NEWACCTS_DATA_30=[18,1,1,1];
 const GS_WIZARD_30=21;
 const GS_REGS_30=22;
@@ -822,23 +823,23 @@ new Chart(document.getElementById('originChart'),{
 // ── Chart 5: Access by Office ─────────────────────────────────────────────
 // GS_ACCESS_DATA_START
 const GS_ACCESS_LABELS=['CWMG-SW','CWMG-Omaha','BMY','CWMG-Doylestown','Diamond Wealth Advisors','CWMG-Hagerstown','Gold Family Wealth','CWMG-The Shobe Financial Group','CWMG-Marquette','Strategic Financial','CWMG-Bedford','Bain Wealth Management','CWMG-Minneapolis','CWMG-Johnson City','Pesta and Pesta','Barrington Wealth Management','BluePrint Wealth'];
-const GS_ACCESS_DATA=[21,19,13,11,11,11,10,8,7,6,6,6,6,6,5,3,2];
-const GS_ACCESS_TOTAL=151;
-const GS_ACCESS_UPDATED='2026-11-10';
+const GS_ACCESS_DATA=[21,20,13,11,11,11,10,8,7,6,6,6,6,6,5,3,2];
+const GS_ACCESS_TOTAL=152;
+const GS_ACCESS_UPDATED='2026-11-11';
 // GS_ACCESS_DATA_END
 // GS_ACCESS_HH_DATA_START
 const GS_TOTAL_PARTNER_OFFICES=259;
 // GS_ACCESS_HH_DATA_END
 // GS_CUSTODIAN_AUM_DATA_START
 const GS_CUSTODIAN_LABELS=['Goldman Sachs','Fidelity','Schwab'];
-const GS_CUSTODIAN_AUM=[2586461.8,17528384658.47,34404639310.57];
-const GS_CUSTODIAN_ACCTS=[22,112837,226008];
-const GS_CUSTODIAN_AUM_UPDATED='2026-11-10';
+const GS_CUSTODIAN_AUM=[2545516.71,17466890307.38,34432767754.61];
+const GS_CUSTODIAN_ACCTS=[22,112932,226310];
+const GS_CUSTODIAN_AUM_UPDATED='2026-11-11';
 // GS_CUSTODIAN_AUM_DATA_END
 // GS_PREV_CUSTODIAN_DATA_START
-const GS_PREV_CUSTODIAN_AUM=[1933427.89,17528384658.47,34404639310.57];
+const GS_PREV_CUSTODIAN_AUM=[2586461.8,17528384658.47,34404639310.57];
 const GS_PREV_CUSTODIAN_ACCTS=[22,112837,226008];
-const GS_PREV_CUSTODIAN_DATE='2026-11-09';
+const GS_PREV_CUSTODIAN_DATE='2026-11-10';
 // GS_PREV_CUSTODIAN_DATA_END
 new Chart(document.getElementById('accessChart'),{
   type:'bar',
