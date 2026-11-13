@@ -664,6 +664,10 @@ function applyOrionData(){
   if(tileRegsSub&&typeof GS_SLEEVED_REGS!=='undefined')tileRegsSub.textContent=GS_REGISTRATIONS+' registrations ('+GS_SLEEVED_REGS+' sleeved, '+(GS_REGISTRATIONS-GS_SLEEVED_REGS)+' not)';
   const tileWiz=document.querySelector('.tile:nth-child(3) .tv');
   if(tileWiz)tileWiz.textContent=GS_WIZARD_30;
+  const tileOffices=document.querySelector('.tile:nth-child(4) .tv');
+  if(tileOffices)tileOffices.textContent=GS_AUM_BY_OFFICE_LABELS.length;
+  const tileOfficesSub=document.querySelector('.tile:nth-child(4) .tsub');
+  if(tileOfficesSub)tileOfficesSub.textContent=GS_AUM_BY_OFFICE_LABELS.join(', ')||'No funded offices yet';
   // L/S card
   const lsCard=Array.from(document.querySelectorAll('.card')).find(function(c){return c.querySelector('.ct')&&c.querySelector('.ct').textContent.includes('L/S');});
   if(lsCard){
