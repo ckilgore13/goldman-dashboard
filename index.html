@@ -391,13 +391,15 @@ const GS_ORION_UPDATED='2026-11-19';
 // GS_PREV_DATA_START
 const GS_PREV_AUM=8437824.47;
 const GS_PREV_DATE='2026-11-18';
-const PREV_MODELS=[{name:'Model Assignment Pending',count:14,aum:6001068.15},
-  {name:'Dynamic Core Aggressive',count:4,aum:854477.28},
-  {name:'Dynamic Core Growth',count:1,aum:627850.39},
-  {name:'Legacy Holdings',count:3,aum:591299.97},
-  {name:'Market Leaders',count:1,aum:269442.49},
-  {name:'Mission US Growth',count:1,aum:83545.92},
-  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10140.27},
+const PREV_MODELS=[{name:'Carson House View Tactical Growth',count:1,aum:4823280},
+  {name:'Model Assignment Pending',count:19,aum:1626285.1},
+  {name:'BILS - SPDR Bloomberg 3-12 Mth Tbill',count:1,aum:918720},
+  {name:'Dynamic Core Aggressive',count:4,aum:851017.37},
+  {name:'Dynamic Core Growth',count:1,aum:625683.38},
+  {name:'Legacy Holdings',count:3,aum:619369.35},
+  {name:'Market Leaders',count:1,aum:268385.75},
+  {name:'Mission US Growth',count:1,aum:83779.38},
+  {name:'IWF - iShares Russell 1000 Growth',count:3,aum:10151.97},
   {name:'Structured Notes',count:1,aum:0}
 ];
 const GS_PREV_CAUSE='Market price movement -- daily equity price fluctuations across Goldman Sachs holdings.';
@@ -641,25 +643,25 @@ buildTable();
 
 // GS_ORIGIN_DATA_START
 const GS_ORIGIN_LABELS=['BMY Wealth','Diamond Wealth Advisors','CWMG Omaha','Strategic Financial','CWMG SW','CWMG Hagerstown'];
-const GS_ORIGIN_WIZARD=[19,4,2,1,3,2];
-const GS_ORIGIN_CUSTODIAN=[0,0,2,2,0,0];
+const GS_ORIGIN_WIZARD=[19,4,3,1,3,2];
+const GS_ORIGIN_CUSTODIAN=[0,0,1,2,0,0];
 // GS_ORIGIN_DATA_END
 
 // GS_NEWACCTS_DATA_START
 const GS_NEWACCTS_LABELS=['BMY Wealth','Diamond Wealth Advisors','CWMG Omaha','Strategic Financial','CWMG SW','CWMG Hagerstown'];
-const GS_NEWACCTS_DATA_30=[19,4,2,1,3,2];
-const GS_WIZARD_30=31;
+const GS_NEWACCTS_DATA_30=[19,4,3,1,3,2];
+const GS_WIZARD_30=32;
 const GS_REGS_30=35;
-const GS_WIZARD_60=31;
+const GS_WIZARD_60=32;
 const GS_REGS_60=35;
-const GS_WIZARD_90=31;
+const GS_WIZARD_90=32;
 const GS_REGS_90=35;
 // GS_NEWACCTS_DATA_END
 // GS_REGTYPES_DATA_START
 const GS_REGTYPES_LABELS=['Roth','JTWROS','IRA Rollover','Transfer on Death','Individual Retirement Account','Individual'];
 const GS_REGTYPES_DATA=[10,9,9,3,2,2];
-const GS_CUSTODIAN_REG_LABELS=['Individual','Roth','Individual Retirement Account'];
-const GS_CUSTODIAN_REG_DATA=[2,1,1];
+const GS_CUSTODIAN_REG_LABELS=['Individual','Individual Retirement Account'];
+const GS_CUSTODIAN_REG_DATA=[2,1];
 // GS_REGTYPES_DATA_END
 
 function applyOrionData(){
@@ -864,7 +866,7 @@ const GS_CUSTODIAN_AUM_UPDATED='2026-11-19';
 // GS_CUSTODIAN_AUM_DATA_END
 // GS_PREV_CUSTODIAN_DATA_START
 const GS_PREV_CUSTODIAN_AUM=[8437824.47,17267952117.21,34588145236.57];
-const GS_PREV_CUSTODIAN_ACCTS=[28,113258,227514];
+const GS_PREV_CUSTODIAN_ACCTS=[35,113258,227514];
 const GS_PREV_CUSTODIAN_DATE='2026-11-18';
 // GS_PREV_CUSTODIAN_DATA_END
 new Chart(document.getElementById('accessChart'),{
