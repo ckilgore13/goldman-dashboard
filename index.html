@@ -561,7 +561,7 @@ function buildTable(){
   MODELS.forEach((m,i)=>{
     const tr=document.createElement('tr');
     const aumCell=`<td class="rb">${fmt$(m.aum)}</td>`;
-    tr.innerHTML=`<td><span class="sw" style="background:${pal[i]}"></span>${m.name}</td><td class="r">${m.count}</td>${aumCell}`;
+    tr.innerHTML=`<td><span class="sw" style="background:${pal[i%pal.length]}"></span>${m.name}</td><td class="r">${m.count}</td>${aumCell}`;
     tbody.appendChild(tr);
   });
   tb.appendChild(tbody);
@@ -807,7 +807,7 @@ new Chart(document.getElementById('strategyChart'),{
     labels:MODELS.map(m=>m.name),
     datasets:[{
       data:MODELS.map(m=>m.count),
-      backgroundColor:PAL(),
+      backgroundColor:MODELS.map((_,i)=>{const p=PAL();return p[i%p.length]}),
       borderWidth:2,borderColor:cv('--cb'),hoverBorderWidth:2
     }]
   },
